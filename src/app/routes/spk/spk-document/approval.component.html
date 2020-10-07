@@ -1,0 +1,48 @@
+<mat-card>
+  <mat-card-content>
+    <form>
+    <mat-table [dataSource]="dataSource">            
+      <ng-container matColumnDef="approver">
+        <mat-header-cell fxFlex="200px" *matHeaderCellDef>Approver</mat-header-cell>
+        <mat-cell fxFlex="200px" *matCellDef="let element">
+          <mat-label>{{element.value.approver.employeeName}}</mat-label>      
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="position">
+        <mat-header-cell fxFlex="200px" *matHeaderCellDef>Position</mat-header-cell>
+        <mat-cell fxFlex="200px" *matCellDef="let element">
+          <mat-label>{{element.value.position.positionName}}</mat-label>      
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action">
+          <mat-header-cell fxFlex="150px" *matHeaderCellDef>Action</mat-header-cell>
+          <mat-cell fxFlex="150px" *matCellDef="let element">
+            <mat-label>{{element.value.approvalAction}}</mat-label>      
+          </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="date">
+        <mat-header-cell fxFlex="150px" *matHeaderCellDef>Tanggal</mat-header-cell>
+        <mat-cell fxFlex="150px" *matCellDef="let element">
+          <mat-label>{{element.value.approvalDate | date: 'dd MMM yyyy hh:mm'}}</mat-label>      
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <mat-header-cell fxFlex="auto" fxFlex.lt-sm="200px" *matHeaderCellDef>Notes</mat-header-cell>
+        <mat-cell fxFlex="auto" fxFlex.lt-sm="200px" *matCellDef="let element">
+          <mat-label>{{element.value.notes}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status" stickyEnd>
+        <mat-header-cell fxFlex="50px" *matHeaderCellDef></mat-header-cell>
+        <mat-cell fxFlex="50px" *matCellDef="let element">          
+          <ng-container *ngIf="element.value.approvalAction!=null">
+            <button mat-icon-button class="green-color" aria-label="status approval"><mat-icon>check</mat-icon></button>
+          </ng-container>
+        </mat-cell>
+      </ng-container>    
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>      
+    </mat-table>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-card-content>
+    <form>
+    <button mat-raised-button color="accent" (click)="addRow()" *ngIf="!readOnly"><mat-icon>add</mat-icon></button>
+    <mat-table [dataSource]="dataSource">      
+      <ng-container matColumnDef="orderNumber">
+        <mat-header-cell fxFlex="80px" *matHeaderCellDef>Nomor</mat-header-cell>
+        <mat-cell fxFlex="80px" *matCellDef="let element">
+          <mat-label>{{element.value.orderNumber}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="jobDescription">
+        <mat-header-cell fxFlex="400px" *matHeaderCellDef>Nama Pekerjaan</mat-header-cell>
+        <mat-cell fxFlex="400px" *matCellDef="let element" [formGroup]="element">
+          <mat-form-field fxFlex="100">
+            <input matInput formControlName="jobDescription" required>          
+            <mat-error *ngIf="element.get('jobDescription').invalid">
+              Silahkan input nama pekerjaan
+            </mat-error>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="uom">
+          <mat-header-cell fxFlex="100px" *matHeaderCellDef>Satuan</mat-header-cell>
+          <mat-cell fxFlex="100px" *matCellDef="let element" [formGroup]="element">
+            <mat-form-field fxFlex="100">
+              <input matInput formControlName="uom" class="text-center" required>          
+              <mat-error *ngIf="element.get('uom').invalid">
+                Silahkan input satuan
+              </mat-error>
+            </mat-form-field>
+          </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="volume">
+        <mat-header-cell fxFlex="120px" *matHeaderCellDef>Volume</mat-header-cell>
+        <mat-cell fxFlex="120px" *matCellDef="let element" [formGroup]="element">            
+          <mat-form-field fxFlex="100">
+            <input matInput formControlName="volume" class="text-right" numberFormatter required>
+            <mat-error *ngIf="element.get('volume').invalid">
+              Silahkan input volume
+            </mat-error>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <mat-header-cell fxFlex="150px" *matHeaderCellDef>Harga</mat-header-cell>
+        <mat-cell fxFlex="150px" *matCellDef="let element" [formGroup]="element">
+          <mat-form-field fxFlex="100">
+            <input matInput formControlName="price" class="text-right" numberFormatter required>
+            <mat-error *ngIf="element.get('price').invalid">
+              Silahkan input harga
+            </mat-error>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action" stickyEnd>
+        <mat-header-cell fxFlex="50px" *matHeaderCellDef>Action</mat-header-cell>
+        <mat-cell fxFlex="50px" *matCellDef="let element; let i=index">
+          <button mat-icon-button color="warn" (click)="removeJob(i)" aria-label="remove row" *ngIf="!readOnly"><mat-icon>delete</mat-icon></button>
+        </mat-cell>
+      </ng-container>    
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>      
+    </mat-table>
+    </form>
+  </mat-card-content>
+</mat-card>

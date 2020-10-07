@@ -1,0 +1,45 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Pencarian</mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div fxFlex="70" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <input matInput placeholder="Nama Kontraktor, Kota, atau Jenis Kontraktor" [(ngModel)]="searchValue.search" name="search">
+              </mat-form-field>
+            </div>
+            <div fxFlex="20" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <mat-label>Klasifikasi</mat-label>
+                <mat-select [(ngModel)]="searchValue.classification" name="classification">
+                  <mat-option value="">-- ALL --</mat-option>
+                  <mat-option value="Kecil">Kecil</mat-option>
+                  <mat-option value="Menengah">Menengah</mat-option>
+                  <mat-option value="Besar">Besar</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="10" fxFlex.lt-sm="100">
+              <button mat-raised-button color="primary" (click)="getData()">Cari</button>            
+            </div>
+          </div>
+        </form>
+        <!-- <div>{{searchValue|json}}</div> -->
+    </mat-expansion-panel>
+</mat-accordion>
+
+<mtx-grid class="mat-elevation-z1"
+          [data]="list"
+          [columns]="columns"
+          [loading]="isLoading"
+          [pageSizeOptions] = "[10, 50, 100]"
+          >
+</mtx-grid>
+
+<div class="customizer-handle" matTooltip="Tambah Kontraktor" cdkDrag (cdkDragStarted)="handleDragStart($event)">
+  <button mat-fab (click)="addContractor($event)">
+    <mat-icon aria-label="go to add new contractor page">add</mat-icon>
+  </button>
+</div>

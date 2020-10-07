@@ -1,0 +1,52 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-dialog-content>
+  <mat-accordion>
+      <mat-expansion-panel>
+          <mat-expansion-panel-header>
+              <mat-panel-title>Pencarian</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form>
+            <div fxLayout="row wrap" fxLayoutGap="10px grid">
+              <div fxFlex="80" fxFlex.lt-sm="80">
+                <mat-form-field class="m-r-8" fxFlex="100">
+                  <input matInput placeholder="Nomor PR, Nama PT, Nama Kebun" [(ngModel)]="searchValue.search" name="search">
+                </mat-form-field>
+              </div>              
+              <div fxFlex="20" fxFlex.lt-sm="20">
+                <button mat-raised-button color="primary" (click)="selectPrs()">Cari</button>            
+              </div>
+            </div>
+          </form>
+          <div>{{searchValue|json}}</div>
+      </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="prNo">
+      <mat-header-cell fxFlex="500px" *matHeaderCellDef>Nomor PR</mat-header-cell>
+      <mat-cell fxFlex="500px" *matCellDef="let element">
+        <mat-label>{{element.prNo}}</mat-label>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="companyName">
+      <mat-header-cell fxFlex="300px" *matHeaderCellDef>PT</mat-header-cell>
+      <mat-cell fxFlex="300px" *matCellDef="let element">
+          <mat-label>{{element.company.companyName}}</mat-label>      
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="arealName">
+      <mat-header-cell fxFlex="300px" *matHeaderCellDef>Kebun</mat-header-cell>
+      <mat-cell fxFlex="300px" *matCellDef="let element">
+          <mat-label>{{element.areal.arealName}}</mat-label>
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="action" stickyEnd>
+      <mat-header-cell fxFlex="50px" *matHeaderCellDef>Action</mat-header-cell>
+      <mat-cell fxFlex="50px" *matCellDef="let element; let i=index">
+        <button mat-icon-button color="primary" (click)="choosePr(element)" aria-label="choose row"><mat-icon>done</mat-icon></button>
+      </mat-cell>
+    </ng-container>    
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+</mat-dialog-content>

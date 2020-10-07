@@ -1,0 +1,85 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Pencarian</mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div fxFlex="45" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <input matInput placeholder="Nomor SPK, Nomor PO" [(ngModel)]="searchValue.search" name="search">
+              </mat-form-field>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <mat-label>Jenis Transaksi</mat-label>
+                <mat-select [(ngModel)]="searchValue.transactionCode" name="transactionCode">
+                  <mat-option value="">-- ALL --</mat-option>
+                  <mat-option value="1">LC</mat-option>
+                  <mat-option value="2">Civil</mat-option>
+                  <mat-option value="3">Project</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="10" fxFlex.lt-sm="100">
+              <button mat-raised-button color="primary" (click)="cari()">Cari</button>            
+            </div>
+          </div>
+        </form>
+        <div>{{searchValue|json}}</div>
+    </mat-expansion-panel>
+</mat-accordion>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-card>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="approveAll()" [disabled]="btnStatus"><mat-icon>check</mat-icon>Approve All</button>
+    <button mat-raised-button color="warn" (click)="rejectAll()" [disabled]="btnStatus"><mat-icon>clear</mat-icon>Reject All</button>
+  </mat-card-actions>
+
+  <mat-card-content>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="check">
+        <mat-header-cell fxFlex="50px" *matHeaderCellDef><mat-checkbox (change)="checkAll($event)"></mat-checkbox></mat-header-cell>
+        <mat-cell fxFlex="50px" class="text-center" *matCellDef="let element" [formGroup]="element">
+          <mat-checkbox formControlName="checkStatus"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="transactionType">
+        <mat-header-cell fxFlex="150px" *matHeaderCellDef>Jenis Transaksi</mat-header-cell>
+        <mat-cell fxFlex="150px" *matCellDef="let element">
+            <mat-label>{{element.value.transactionTypeCode}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="transactionNumber">
+        <mat-header-cell fxFlex="auto" fxFlex.lt-sm="200px" *matHeaderCellDef>Nomor Transaksi</mat-header-cell>
+        <mat-cell fxFlex="auto" fxFlex.lt-sm="200px" *matCellDef="let element">
+            <mat-label>{{element.value.transactionNumber}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="transactionDate">
+        <mat-header-cell fxFlex="120px" *matHeaderCellDef>Tanggal Input</mat-header-cell>
+        <mat-cell fxFlex="120px" *matCellDef="let element">
+            <mat-label>{{element.value.transactionDate | date: 'dd MMM yyyy'}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="requestor">
+        <mat-header-cell fxFlex="200px" *matHeaderCellDef>Requestor</mat-header-cell>
+        <mat-cell fxFlex="200px" *matCellDef="let element">
+            <mat-label>{{element.value.requestor.employeeName}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action" stickyEnd>
+        <mat-header-cell fxFlex="100px" *matHeaderCellDef>Action</mat-header-cell>
+        <mat-cell fxFlex="100px" *matCellDef="let element; let i=index">
+          <button mat-icon-button (click)="showDetail(element)" aria-label="show detail"><mat-icon>description</mat-icon></button>
+          <button mat-icon-button color="accent" (click)="doAction(element, i)" aria-label="show detail"><mat-icon>edit</mat-icon></button>
+        </mat-cell>
+      </ng-container>    
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator #paginator (page)="pageClick($event)">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

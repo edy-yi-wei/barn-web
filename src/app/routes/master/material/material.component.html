@@ -1,0 +1,57 @@
+<mat-card>
+  <mat-card-actions>
+    <button mat-raised-button class="m-t-8" (click)="back()"><mat-icon>list</mat-icon> Kembali</button>
+    <button mat-raised-button color="primary" class="m-t-8" (click)="save()"><mat-icon>save</mat-icon> Simpan</button>
+  </mat-card-actions>
+  
+  <mat-card-content>    
+    <form [formGroup]="formMaterial" class="matero-form-horizontal" style="padding-top: 20px;">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="80" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Nama</mat-label>
+            <input matInput formControlName="materialName" required>
+            <mat-error *ngIf="formMaterial.get('materialName').invalid">
+              Silahkan input nama
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="20" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Satuan</mat-label>
+            <input matInput formControlName="uom" required>
+            <mat-error *ngIf="formMaterial.get('uom').invalid">
+              Silahkan input satuan
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="50" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Jenis</mat-label>      
+            <ng-container formGroupName="type">
+              <mat-select formControlName="typeId" required>
+                <mat-option value="">-- None --</mat-option>
+                <mat-option *ngFor="let r of types" [value]="r.typeId">{{r.typeName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formMaterial.get('type').get('typeId').invalid">
+                Silahkan pilih jenis
+              </mat-error>
+            </ng-container>
+          </mat-form-field>          
+        </div>
+      </div>            
+
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Keterangan</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>            
+      </div>
+    </form>      
+  </mat-card-content>
+  <!-- {{formMaterial.value|json}}   -->
+</mat-card>

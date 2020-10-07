@@ -1,0 +1,48 @@
+<mat-toolbar class="matero-toolbar">
+  <button mat-icon-button class="matero-toolbar-button" *ngIf="showToggle"
+          (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span fxFlex></span>
+
+  <button mat-button class="matero-toolbar-button matero-avatar-button" href="javascript:void(0)"
+      (click)="openPanel()">
+  <mat-icon>account_circle</mat-icon>
+  <!-- <img class="matero-avatar" src="assets/images/avatar.jpg" width="32" alt="avatar" /> -->
+  <span class="matero-username">{{userName}}</span>
+</button>
+
+<div [ngClass]="{ 'customizer-panel': true, 'mat-elevation-z12 opened': opened }">
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="f-w-400">
+    <span class="header-style">Configuration</span>
+    <button mat-icon-button (click)="closePanel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-divider inset class="m-x-0 m-y-24"></mat-divider>
+  <div class="sub-header-style">Theme</div>
+  <div class="m-l-8">
+    <mat-radio-group [(ngModel)]="options.theme" (change)="sendOptions()">
+      <mat-radio-button class="m-r-8" [value]="'light'">Light</mat-radio-button>
+      <mat-radio-button class="m-r-8" [value]="'dark'">Dark</mat-radio-button>
+    </mat-radio-group>
+  </div>  
+  <div class="sub-header-style">Position</div>
+  <div class="m-l-8">    
+    <mat-radio-group [(ngModel)]="options.navPos"
+                     (change)="options.sidenavOpened = options.navPos === 'side' ? true : false; sendOptions()">
+      <mat-radio-button class="m-r-8" [value]="'side'">side</mat-radio-button>
+      <mat-radio-button class="m-r-8" [value]="'top'"
+                        [disabled]="options.headerPos === 'above' || !options.showHeader">top
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <mat-divider inset class="m-x-0 m-y-24"></mat-divider>
+  <button mat-icon-button (click)="logout()">
+    <mat-icon>power_settings_new</mat-icon> Logout
+  </button>
+</div>
+<div [ngClass]="{ 'customizer-panel-overlay': true, opened: opened }" (click)="closePanel()"></div>
+  
+</mat-toolbar>

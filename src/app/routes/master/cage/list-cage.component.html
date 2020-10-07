@@ -1,0 +1,88 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Pencarian</mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div fxFlex="45" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <input matInput placeholder="Nama" [(ngModel)]="searchValue.search" name="search">
+              </mat-form-field>
+            </div>            
+            <div fxFlex="10" fxFlex.lt-sm="100">
+              <button mat-raised-button color="primary" (click)="cari()">Cari</button>            
+            </div>
+          </div>
+        </form>
+        <!-- <div>{{searchValue|json}}</div> -->
+    </mat-expansion-panel>
+</mat-accordion>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-table [dataSource]="list">      
+  <ng-container matColumnDef="tag">
+    <mat-header-cell fxFlex="200px" fxFlex.lt-sm="200px" *matHeaderCellDef>Nama</mat-header-cell>
+    <mat-cell fxFlex="200px" fxFlex.lt-sm="200px" *matCellDef="let element">
+      <mat-label>{{element.tag}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="region">
+    <mat-header-cell fxFlex="200px" fxFlex.lt-sm="200px" *matHeaderCellDef>Region</mat-header-cell>
+    <mat-cell fxFlex="200px" fxFlex.lt-sm="200px" *matCellDef="let element">
+        <mat-label>{{element.region.groupCategoryName}}</mat-label>      
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="farm">
+      <mat-header-cell fxFlex="200px" fxFlex.lt-sm="200px" *matHeaderCellDef>Farm</mat-header-cell>
+      <mat-cell fxFlex="200px" fxFlex.lt-sm="200px" *matCellDef="let element">
+        <mat-label>{{element.farm.groupCategoryName}}</mat-label>
+      </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="unit">
+    <mat-header-cell fxFlex="200px" fxFlex.lt-sm="200px" *matHeaderCellDef>Unit</mat-header-cell>
+    <mat-cell fxFlex="200px" fxFlex.lt-sm="200px" *matCellDef="let element">            
+      <mat-label>{{element.unit.groupCategoryName}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="size">
+    <mat-header-cell fxFlex="150px" fxFlex.lt-sm="150px" *matHeaderCellDef>Ukuran</mat-header-cell>
+    <mat-cell fxFlex="150px" fxFlex.lt-sm="150px" *matCellDef="let element">
+      <mat-label>{{element.size}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="livestockType">
+    <mat-header-cell fxFlex="150px" fxFlex.lt-sm="150px" *matHeaderCellDef>Jenis Ayam</mat-header-cell>
+    <mat-cell fxFlex="150px" fxFlex.lt-sm="150px" *matCellDef="let element">
+      <mat-label>{{element.livestockType.livestockName}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="notes">
+    <mat-header-cell fxFlex="300px" fxFlex.lt-sm="300px" *matHeaderCellDef>Keterangan</mat-header-cell>
+    <mat-cell fxFlex="300px" fxFlex.lt-sm="300px" *matCellDef="let element">
+      <mat-label>{{element.notes}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action" stickyEnd>
+    <mat-header-cell fxFlex="80px" *matHeaderCellDef>Action</mat-header-cell>
+    <mat-cell fxFlex="80px" *matCellDef="let element">
+      <button mat-icon-button color="primary" (click)="edit(element)" aria-label="edit"><mat-icon>edit</mat-icon></button>      
+      <button mat-icon-button color="warn" (click)="delete(element)" aria-label="delete"><mat-icon>delete</mat-icon></button>      
+    </mat-cell>
+  </ng-container>    
+  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: columns;"></mat-row>      
+</mat-table>
+
+<mat-paginator #paginator                
+                [pageIndex]="0"
+                [pageSize]="10"
+                (page)="pageClick($event)">
+</mat-paginator>
+
+<!-- <div>{{list|json}}</div> -->
+
+<div class="customizer-handle" matTooltip="Tambah" cdkDrag (cdkDragStarted)="handleDragStart($event)">
+  <button mat-fab (click)="addCage($event)">
+    <mat-icon aria-label="go to add new page">add</mat-icon>
+  </button>
+</div>

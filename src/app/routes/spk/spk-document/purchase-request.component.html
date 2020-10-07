@@ -1,0 +1,43 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-card>  
+  <mat-card-actions *ngIf="!readOnly">
+    <button mat-raised-button color="accent" (click)="showChoosePRDialog()"><mat-icon>add</mat-icon></button>
+  </mat-card-actions>
+
+  <mat-card-content>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="prNo">
+        <mat-header-cell fxFlex="400px" *matHeaderCellDef>Nomor PR</mat-header-cell>
+        <mat-cell fxFlex="400px" *matCellDef="let element">
+          <mat-label>{{element.value.pr.prNo}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="companyName">
+        <mat-header-cell fxFlex="300px" *matHeaderCellDef>PT</mat-header-cell>
+        <mat-cell fxFlex="300px" *matCellDef="let element">
+            <mat-label>{{element.value.pr.company.companyName}}</mat-label>      
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="arealName">
+        <mat-header-cell fxFlex="300px" *matHeaderCellDef>Kebun</mat-header-cell>
+        <mat-cell fxFlex="300px" *matCellDef="let element">
+            <mat-label>{{element.value.pr.areal.arealName}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="arealLocation">
+        <mat-header-cell fxFlex="300px" *matHeaderCellDef>Lokasi Kebun</mat-header-cell>
+        <mat-cell fxFlex="300px" *matCellDef="let element">
+            <mat-label>{{element.value.pr.arealLocation}}</mat-label>
+        </mat-cell>
+      </ng-container>            
+      <ng-container matColumnDef="action" stickyEnd>        
+        <mat-header-cell fxFlex="50px" *matHeaderCellDef>Action</mat-header-cell>
+        <mat-cell fxFlex="50px" *matCellDef="let element; let i=index">
+          <button mat-icon-button color="warn" (click)="removePr(i)" aria-label="remove row" *ngIf="!readOnly"><mat-icon>delete</mat-icon></button>
+        </mat-cell>
+      </ng-container>          
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>

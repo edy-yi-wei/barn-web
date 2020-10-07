@@ -1,0 +1,116 @@
+<mat-card>
+  <mat-card-actions>
+    <button mat-raised-button class="m-t-8" (click)="back()"><mat-icon>list</mat-icon> Kembali</button>
+    <button mat-raised-button color="primary" class="m-t-8" (click)="save()"><mat-icon>save</mat-icon> Simpan</button>
+  </mat-card-actions>
+  
+  <mat-card-content>    
+    <form [formGroup]="formCage" class="matero-form-horizontal" style="padding-top: 20px;">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Nama</mat-label>
+            <input matInput formControlName="tag" required>
+            <mat-error *ngIf="formCage.get('tag').invalid">
+              Silahkan input nama
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="30" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Region</mat-label>      
+            <ng-container formGroupName="region">
+              <mat-select formControlName="groupCategoryId" required (selectionChange)="selectFarm()">
+                <mat-option value="">-- None --</mat-option>
+                <mat-option *ngFor="let r of regions" [value]="r.groupCategoryId">{{r.groupCategoryName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formCage.get('region').get('groupCategoryId').invalid">
+                Silahkan pilih region
+              </mat-error>
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Farm</mat-label>      
+            <ng-container formGroupName="farm">
+              <mat-select formControlName="groupCategoryId" required (selectionChange)="selectUnit()">
+                <mat-option value="">-- None --</mat-option>
+                <mat-option *ngFor="let f of farms" [value]="f.groupCategoryId">{{f.groupCategoryName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formCage.get('farm').get('groupCategoryId').invalid">
+                Silahkan pilih farm
+              </mat-error>
+            </ng-container>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Unit</mat-label>      
+            <ng-container formGroupName="unit">
+              <mat-select formControlName="groupCategoryId" required>
+                <mat-option value="">-- None --</mat-option>
+                <mat-option *ngFor="let u of units" [value]="u.groupCategoryId">{{u.groupCategoryName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formCage.get('unit').get('groupCategoryId').invalid">
+                Silahkan pilih unit
+              </mat-error>
+            </ng-container>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Ukuran</mat-label>
+            <input matInput formControlName="size" required>
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Tempat Minum</mat-label>
+            <input matInput formControlName="drinkingCup" required>
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Tempat Makan</mat-label>
+            <input matInput formControlName="feedingTray" required>
+          </mat-form-field>
+        </div>
+        <div fxFlex="25" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Jumlah Kipas</mat-label>
+            <input matInput formControlName="fan" required>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="40" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Jenis Ayam</mat-label>      
+            <ng-container formGroupName="livestockType">
+              <mat-select formControlName="livestockTypeId" required>
+                <mat-option value="0">-- None --</mat-option>
+                <mat-option *ngFor="let l of livestocks" [value]="l.livestockTypeId">{{l.livestockName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="formCage.get('livestockType').get('livestockTypeId').invalid">
+                Silahkan pilih jenis ayam
+              </mat-error>
+            </ng-container>
+          </mat-form-field>
+        </div>            
+      </div>
+
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Keterangan</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>            
+      </div>
+    </form>      
+  </mat-card-content>
+  <!-- {{formCage.value|json}}   -->
+</mat-card>

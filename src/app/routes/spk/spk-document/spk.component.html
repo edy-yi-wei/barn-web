@@ -1,0 +1,456 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-card>
+  <ng-container *ngIf="!viewOnly">
+    <mat-card-actions>
+      <button mat-raised-button class="m-t-8" (click)="back()" [disabled]="btnStatus"><mat-icon>list</mat-icon> Kembali</button>
+      <ng-container *ngIf="!readOnly">
+        <button mat-raised-button class="m-t-8" (click)="save('SAVE')" [disabled]="btnStatus"><mat-icon>save</mat-icon> Simpan</button>
+        <button mat-raised-button color="primary" class="m-t-8" (click)="save('SUBMIT')" [disabled]="btnStatus"><mat-icon>send</mat-icon> Submit</button>
+      </ng-container>
+      <b class="status-position-right">{{formSpk.value.status.statusName}}</b>
+    </mat-card-actions>
+  </ng-container>
+  <mat-card-content>
+    <mat-tab-group dynamicHeight>      
+      <mat-tab>
+        <ng-template mat-tab-label>SPK</ng-template>
+        <form [formGroup]="formSpk" class="matero-form-horizontal" style="padding-top: 20px;">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="35" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nomor SPK</mat-label>
+                <input matInput formControlName="spkNumber">                
+              </mat-form-field>
+            </div>          
+            <div fxFlex="20" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Jenis SPK</mat-label>
+                <ng-container formGroupName="spkType">
+                  <mat-select formControlName="spkTypeId" required (click)="confirmChange()" (selectionChange)="resetSpkType()">
+                    <mat-option [value]=0>-- None --</mat-option>
+                    <mat-option [value]=1>LC</mat-option>
+                    <mat-option [value]=2>Civil</mat-option>
+                    <mat-option [value]=3>Project</mat-option>
+                  </mat-select>
+                </ng-container>
+                <mat-error *ngIf="formSpk.get('spkType').get('spkTypeId').invalid">
+                  Silahkan pilih jenis SPK
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="20" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Tanggal Input</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="spkDate">
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="35" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nomor PO</mat-label>
+                <input matInput formControlName="poNumber" required>
+                <mat-error *ngIf="formSpk.get('poNumber').invalid">
+                  Silahkan input nomor PO
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="35" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nomor Retensi PO</mat-label>
+                <input matInput formControlName="poRetensiNumber">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>PT</mat-label>
+                <ng-container formGroupName="company">
+                  <input matInput formControlName="companyName">
+                </ng-container>                
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Perwakilan Perusahaan</mat-label>                
+                <mat-select formControlName="companyRepresentative" required>
+                  <mat-option value="0">-- None --</mat-option>
+                  <mat-option *ngFor="let r of companyRepresentatives" [value]="r.companyRepresentativeId">{{r.employee.employeeName}}</mat-option>
+                </mat-select>                
+                <mat-error *ngIf="formSpk.get('companyRepresentative').invalid">
+                  Silahkan pilih perwakilan perusahaan
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Areal</mat-label>
+                <ng-container formGroupName="areal">
+                  <input matInput formControlName="arealName">
+                </ng-container>                
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Lokasi</mat-label>                
+                <input matInput formControlName="arealLocation">
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Kontraktor 1</mat-label>                
+                  <ng-container [formGroup]="contractor1.get('contractor')">
+                    <input matInput formControlName="contractorName" required [readonly]="true">
+                  </ng-container>
+                <button matSuffix mat-icon-button aria-label="search contractor 1" (click)="openChooseContractor(1)" [disabled]="readOnly"><mat-icon>search</mat-icon></button>
+                <button matSuffix mat-icon-button aria-label="clear contractor 1" (click)="clearContractor(1)" [disabled]="readOnly"><mat-icon>clear</mat-icon></button>                
+                <mat-error>
+                  Silahkan pilih kontraktor 1
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Perwakilan Kontraktor 1</mat-label>
+                <ng-container [formGroup]="contractor1">
+                  <mat-select formControlName="contractorPicId" required>                    
+                    <mat-option value="0">-- None --</mat-option>
+                    <mat-option *ngFor="let r of contractor1.get('contractor').get('pics').value" [value]="r.contractorPicId">{{r.name}}</mat-option>
+                  </mat-select>                
+                </ng-container>
+                <mat-error>
+                  Silahkan pilih perwakilan kontraktor 1
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Kontraktor 2</mat-label>                
+                  <ng-container [formGroup]="contractor2.get('contractor')">
+                    <input matInput formControlName="contractorName" [readonly]="true">                
+                  </ng-container>
+                <button matSuffix mat-icon-button aria-label="search contractor 2" (click)="openChooseContractor(2)" [disabled]="readOnly"><mat-icon>search</mat-icon></button>
+                <button matSuffix mat-icon-button aria-label="clear contractor 2" (click)="clearContractor(2)" [disabled]="readOnly"><mat-icon>clear</mat-icon></button>
+              </mat-form-field>              
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Perwakilan Kontraktor 2</mat-label>
+                <ng-container [formGroup]="contractor2">
+                  <mat-select formControlName="contractorPicId">
+                    <mat-option value="0">-- None --</mat-option>
+                    <mat-option *ngFor="let r of contractor2.get('contractor').get('pics').value" [value]="r.contractorPicId">{{r.name}}</mat-option>
+                  </mat-select>                
+                </ng-container>
+                <mat-error>
+                  Silahkan pilih perwakilan kontraktor 2
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="25" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Tanggal Mulai Kontrak</mat-label>
+                <input matInput [matDatepicker]="startContractPicker" formControlName="startContract" required>
+                <mat-datepicker-toggle matSuffix [for]="startContractPicker" [disabled]="readOnly"></mat-datepicker-toggle>
+                <mat-datepicker #startContractPicker></mat-datepicker>
+                <mat-error *ngIf="formSpk.get('startContract').invalid">
+                  Silahkan pilih tanggal mulai kontrak
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="25" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Tanggal Berakhir Kontrak</mat-label>
+                <input matInput [matDatepicker]="endContractPicker" formControlName="endContract" required>
+                <mat-datepicker-toggle matSuffix [for]="endContractPicker" [disabled]="readOnly"></mat-datepicker-toggle>
+                <mat-datepicker #endContractPicker></mat-datepicker>
+                <mat-error *ngIf="formSpk.get('endContract').invalid">
+                  Silahkan pilih tanggal berakhir kontrak
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="30" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Bank</mat-label>
+                <input matInput formControlName="bank" required>                
+                <mat-error *ngIf="formSpk.get('bank').invalid">
+                  Silahkan input nama bank
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="30" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nomor Rekening</mat-label>
+                <input matInput formControlName="bankAccountNumber" required>                
+                <mat-error *ngIf="formSpk.get('bankAccountNumber').invalid">
+                  Silahkan input nomor rekening
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="40" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nama Pemilik Rekening</mat-label>
+                <input matInput formControlName="bankAccountName" required>                
+                <mat-error *ngIf="formSpk.get('bankAccountName').invalid">
+                  Silahkan input nama pemilik rekening
+                </mat-error>              
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field fxFlex="100">
+                <mat-label>Judul Perjanjian</mat-label>
+                <input matInput formControlName="spkTitle" required>
+                <mat-error *ngIf="formSpk.get('spkTitle').invalid">
+                  Silahkan input judul perjanjian
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>    
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Lokasi Perjanjian</mat-label>
+                <input matInput formControlName="signedLocation" required>
+                <mat-error *ngIf="formSpk.get('signedLocation').invalid">
+                  Silahkan input Lokasi Perjanjian
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="20" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Tanggal Perjanjian</mat-label>
+                <input matInput [matDatepicker]="signedDatePicker" formControlName="signedDate" required>
+                <mat-datepicker-toggle matSuffix [for]="signedDatePicker" [disabled]="readOnly"></mat-datepicker-toggle>
+                <mat-datepicker #signedDatePicker></mat-datepicker>
+                <mat-error *ngIf="formSpk.get('signedDate').invalid">
+                  Silahkan pilih Tanggal Perjanjian
+                </mat-error>              
+              </mat-form-field>
+            </div>
+          </div>    
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field fxFlex="100">
+                <mat-label>Ruang Lingkup Pekerjaan</mat-label>
+                <textarea matInput formControlName="jobSummary" required></textarea>
+                <mat-error *ngIf="formSpk.get('jobSummary').invalid">
+                  Silahkan input ruang lingkup pekerjaan
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>    
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="20" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nilai Retensi</mat-label>
+                <input matInput type="number" formControlName="retensiValue" class="text-right" required>                
+                <mat-error *ngIf="formSpk.get('retensiValue').invalid">
+                  Silahkan input nilai retensi
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="40" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Masa Retensi</mat-label>
+                <input matInput formControlName="retensiPeriod" required>                
+                <mat-error *ngIf="formSpk.get('retensiPeriod').invalid">
+                  Silahkan input masa retensi
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="40" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Pilihan Hukum</mat-label>
+                <input matInput formControlName="courtLocation" required>                
+                <mat-error *ngIf="formSpk.get('courtLocation').invalid">
+                  Silahkan input pilihan hukum
+                </mat-error>              
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Cara dan Syarat Pembayaran</mat-label>
+                <textarea matInput formControlName="termOfPayment" required></textarea>
+                <mat-error *ngIf="formSpk.get('termOfPayment').invalid">
+                  Silahkan input cara dan syarat pembayaran
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Performance Warranty</mat-label>
+                <textarea matInput formControlName="performanceWarranty" required></textarea>
+                <mat-error *ngIf="formSpk.get('performanceWarranty').invalid">
+                  Silahkan input performance warranty
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Denda Keterlambatan</mat-label>
+                <textarea matInput formControlName="lateCharge" required></textarea>
+                <mat-error *ngIf="formSpk.get('lateCharge').invalid">
+                  Silahkan input denda keterlambatan
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Lain-lain</mat-label>
+                <textarea matInput formControlName="others"></textarea>
+                <mat-error *ngIf="formSpk.get('others').invalid">
+                  Silahkan input lain-lain
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Saksi 1</mat-label>
+                <ng-container [formGroup]="witness1">
+                  <input matInput formControlName="witness" required>
+                </ng-container>
+                <mat-error *ngIf="witness1.get('witness').invalid">
+                  Silahkan input saksi 1
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Jabatan Saksi 1</mat-label>
+                <ng-container [formGroup]="witness1">
+                  <input matInput formControlName="witnessPosition" required>
+                </ng-container>
+                <mat-error *ngIf="witness1.get('witnessPosition').invalid">
+                  Silahkan input jabatan saksi 1
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Saksi 2</mat-label>
+                <ng-container [formGroup]="witness2">
+                  <input matInput formControlName="witness" required>
+                </ng-container>
+                <mat-error *ngIf="witness2.get('witness').invalid">
+                  Silahkan input saksi 2
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Jabatan Saksi 2</mat-label>
+                <ng-container [formGroup]="witness2">
+                  <input matInput formControlName="witnessPosition" required>
+                </ng-container>
+                <mat-error *ngIf="witness2.get('witnessPosition').invalid">
+                  Silahkan input jabatan saksi 2
+                </mat-error>              
+              </mat-form-field>
+            </div>            
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Saksi 3</mat-label>
+                <ng-container [formGroup]="witness3">
+                  <input matInput formControlName="witness" required>
+                </ng-container>
+                <mat-error *ngIf="witness3.get('witness').invalid">
+                  Silahkan input saksi 3
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="50" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Jabatan Saksi 3</mat-label>
+                <ng-container [formGroup]="witness3">
+                  <input matInput formControlName="witnessPosition" required>
+                </ng-container>
+                <mat-error *ngIf="witness3.get('witnessPosition').invalid">
+                  Silahkan input jabatan saksi 3
+                </mat-error>              
+              </mat-form-field>
+            </div>      
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Purchase Request</ng-template>
+        <spk-pr [formSpk]="formSpk" [readOnly]="readOnly"></spk-pr>
+      </mat-tab>      
+      <ng-container *ngIf="formSpk.get('spkType').get('spkTypeId').value==1">
+        <mat-tab>
+          <ng-template mat-tab-label>Volume dan Harga</ng-template>
+          <spk-volume [formSpk]="formSpk" [readOnly]="readOnly"></spk-volume>
+        </mat-tab>
+      </ng-container>
+      <ng-container *ngIf="formSpk.get('spkType').get('spkTypeId').value>1">
+        <mat-tab>
+          <ng-template mat-tab-label>Volume dan Harga</ng-template>
+          <spk-volume-extend [formSpk]="formSpk" [readOnly]="readOnly"></spk-volume-extend>
+        </mat-tab>
+      </ng-container>
+      <mat-tab>
+        <ng-template mat-tab-label>Rincian Pekerjaan</ng-template>
+        <spk-detail [formSpk]="formSpk" [readOnly]="readOnly"></spk-detail>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Lampiran</ng-template>
+        <spk-attachment [formSpk]="formSpk" [attachmentData]="attachmentData" [readOnly]="readOnly"></spk-attachment>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Log</ng-template>
+        <spk-log [formSpk]="formSpk"></spk-log>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Approval</ng-template>
+        <spk-approval [formSpk]="formSpk"></spk-approval>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <!-- {{formSpk.value|json}}   -->
+</mat-card>

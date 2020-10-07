@@ -1,0 +1,109 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+            <mat-panel-title>Pencarian</mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <div fxLayout="row wrap" fxLayoutGap="10px grid">
+            <div fxFlex="45" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <input matInput placeholder="Nomor SPK, Nomor PO" [(ngModel)]="searchValue.search" name="search">
+              </mat-form-field>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <mat-label>Jenis SPK</mat-label>
+                <mat-select [(ngModel)]="searchValue.type" name="type">
+                  <mat-option value="">-- ALL --</mat-option>
+                  <mat-option value="1">LC</mat-option>
+                  <mat-option value="2">Civil</mat-option>
+                  <mat-option value="3">Project</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <mat-label>PT</mat-label>
+                <mat-select [(ngModel)]="searchValue.company" name="company">
+                  <mat-option value="">-- ALL --</mat-option>
+                  <mat-option *ngFor="let c of companies" [value]="c.companyId">{{c.companyName}}</mat-option>                  
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="100">
+              <mat-form-field class="m-r-8" fxFlex="100">
+                <mat-label>Status</mat-label>
+                <mat-select [(ngModel)]="searchValue.status" name="status">
+                  <mat-option value="">-- ALL --</mat-option>
+                  <mat-option value="1">Draft</mat-option>
+                  <mat-option value="2">Waiting Approval</mat-option>
+                  <mat-option value="3">Appproved</mat-option>
+                  <mat-option value="4">Rejected</mat-option>
+                  <mat-option value="5">Closed</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxFlex="10" fxFlex.lt-sm="100">
+              <button mat-raised-button color="primary" (click)="cari()">Cari</button>            
+            </div>
+          </div>
+        </form>
+        <!-- <div>{{searchValue|json}}</div> -->
+    </mat-expansion-panel>
+</mat-accordion>
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<mat-table [dataSource]="list">      
+  <ng-container matColumnDef="spkNumber">
+    <mat-header-cell fxFlex="auto" fxFlex.lt-sm="200px" *matHeaderCellDef>Nomor SPK</mat-header-cell>
+    <mat-cell fxFlex="auto" fxFlex.lt-sm="200px" *matCellDef="let element">
+      <mat-label>{{element.spkNumber}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="poNumber">
+    <mat-header-cell fxFlex="200px" *matHeaderCellDef>Nomor PO</mat-header-cell>
+    <mat-cell fxFlex="200px" *matCellDef="let element">
+        <mat-label>{{element.poNumber}}</mat-label>      
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="spkType">
+      <mat-header-cell fxFlex="100px" *matHeaderCellDef>Jenis SPK</mat-header-cell>
+      <mat-cell fxFlex="100px" *matCellDef="let element">
+        <mat-label>{{element.spkType.spkTypeName}}</mat-label>
+      </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="company">
+    <mat-header-cell fxFlex="250px" *matHeaderCellDef>PT</mat-header-cell>
+    <mat-cell fxFlex="250px" *matCellDef="let element">            
+      <mat-label>{{element.company.companyName}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="status">
+    <mat-header-cell fxFlex="150px" *matHeaderCellDef>Status</mat-header-cell>
+    <mat-cell fxFlex="150px" *matCellDef="let element">
+      <mat-label>{{element.status.statusName}}</mat-label>
+    </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="action" stickyEnd>
+    <mat-header-cell fxFlex="80px" *matHeaderCellDef>Action</mat-header-cell>
+    <mat-cell fxFlex="80px" *matCellDef="let element">
+      <button mat-icon-button color="primary" (click)="edit(element)" aria-label="edit"><mat-icon>edit</mat-icon></button>
+      <ng-container *ngIf="element.status.statusId==3">
+        <button mat-icon-button color="primary" (click)="print(element)" aria-label="edit"><mat-icon>print</mat-icon></button>
+      </ng-container>
+    </mat-cell>
+  </ng-container>    
+  <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: columns;"></mat-row>      
+</mat-table>
+
+<mat-paginator #paginator                
+                [pageIndex]="0"
+                [pageSize]="10"
+                (page)="pageClick($event)">
+</mat-paginator>
+
+<div class="customizer-handle" matTooltip="Tambah SPK" cdkDrag (cdkDragStarted)="handleDragStart($event)">
+  <button mat-fab (click)="addSpk($event)">
+    <mat-icon aria-label="go to add new spk page">add</mat-icon>
+  </button>
+</div>

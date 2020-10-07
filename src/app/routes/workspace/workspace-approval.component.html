@@ -1,0 +1,21 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div mat-dialog-title>
+  <mat-label>{{title}}</mat-label>
+</div>
+
+<mat-dialog-content>  
+  <textarea [(ngModel)]="approvalNotes" class="approval-notes"></textarea>  
+</mat-dialog-content>
+<div class="approval-chip">
+  <mat-chip-list>
+    <mat-chip (click)="chipClick('Approve')">Approve</mat-chip>
+    <mat-chip (click)="chipClick('OK')">OK</mat-chip>
+    <mat-chip (click)="chipClick('Setuju')">Setuju</mat-chip>
+    <mat-chip (click)="chipClick('Reject')">Reject</mat-chip>
+    <mat-chip (click)="chipClick('Revisi')">Revisi</mat-chip>
+  </mat-chip-list>
+</div>
+<mat-dialog-actions>  
+  <button mat-raised-button color="primary" (click)="approve()" [disabled]="isLoading"><mat-icon>check</mat-icon>Approve</button>
+  <button mat-raised-button color="warn" (click)="reject()" [disabled]="isLoading"><mat-icon>clear</mat-icon>Reject</button>
+</mat-dialog-actions>  

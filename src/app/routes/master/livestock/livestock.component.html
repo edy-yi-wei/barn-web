@@ -1,0 +1,32 @@
+<mat-card>
+  <mat-card-actions>
+    <button mat-raised-button class="m-t-8" (click)="back()"><mat-icon>list</mat-icon> Kembali</button>
+    <button mat-raised-button color="primary" class="m-t-8" (click)="save()"><mat-icon>save</mat-icon> Simpan</button>
+  </mat-card-actions>
+  
+  <mat-card-content>    
+    <form [formGroup]="formLivestock" class="matero-form-horizontal" style="padding-top: 20px;">
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="70" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Nama</mat-label>
+            <input matInput formControlName="livestockName" required>
+            <mat-error *ngIf="formLivestock.get('livestockName').invalid">
+              Silahkan input nama
+            </mat-error>
+          </mat-form-field>
+        </div>        
+      </div>
+      
+      <div fxLayout="row wrap" fxLayoutGap="20px grid">
+        <div fxFlex="100" fxFlex.lt-sm="100">
+          <mat-form-field>
+            <mat-label>Keterangan</mat-label>
+            <textarea matInput formControlName="notes"></textarea>
+          </mat-form-field>
+        </div>            
+      </div>
+    </form>      
+  </mat-card-content>
+  <!-- {{formLivestock.value|json}}   -->
+</mat-card>

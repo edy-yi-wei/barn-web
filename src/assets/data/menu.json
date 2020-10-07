@@ -1,0 +1,42 @@
+{
+  "menu": [    
+    {
+      "state": "master",
+      "name": "Master",
+      "type": "sub",
+      "icon": "assignment",
+      "children":[
+        {
+          "state": "cage-list",
+          "name": "Kandang",
+          "type": "link"
+        },
+        {
+          "state": "material-list",
+          "name": "Material",
+          "type": "link"
+        },
+        {
+          "state": "livestock-list",
+          "name": "Jenis Ternak",
+          "type": "link"
+        },
+        {
+          "state": "group-category-list",
+          "name": "Group",
+          "type": "link"
+        },
+        {
+          "state": "user-list",
+          "name": "User",
+          "type": "link"
+        },
+        {
+          "state": "role-list",
+          "name": "Role",
+          "type": "link"
+        }
+      ]
+    }
+  ]
+}

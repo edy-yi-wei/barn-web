@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-content>
+    <form>
+    <mat-table [dataSource]="dataSource">      
+      <ng-container matColumnDef="no">
+        <mat-header-cell fxFlex="50px" *matHeaderCellDef>Nomor</mat-header-cell>
+        <mat-cell fxFlex="50px" *matCellDef="let element">
+          <mat-label>{{element.value.logOrder}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="tanggal">
+        <mat-header-cell fxFlex="150px" *matHeaderCellDef>Tanggal</mat-header-cell>
+        <mat-cell fxFlex="150px" *matCellDef="let element">
+          <mat-label>{{element.value.logDate | date: 'dd MMM yyyy hh:mm'}}</mat-label>      
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="action">
+          <mat-header-cell fxFlex="150px" *matHeaderCellDef>Action</mat-header-cell>
+          <mat-cell fxFlex="150px" *matCellDef="let element">
+            <mat-label>{{element.value.logAction}}</mat-label>      
+          </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="notes">
+        <mat-header-cell fxFlex="auto" fxFlex.lt-sm="200px" *matHeaderCellDef>Notes</mat-header-cell>
+        <mat-cell fxFlex="auto" fxFlex.lt-sm="200px" *matCellDef="let element">
+          <mat-label>{{element.value.notes}}</mat-label>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="pic">
+        <mat-header-cell fxFlex="150px" *matHeaderCellDef>PIC</mat-header-cell>
+        <mat-cell fxFlex="150px" *matCellDef="let element">
+          <mat-label>{{element.value.loginHistory.userName}}</mat-label>      
+        </mat-cell>
+      </ng-container>      
+      <mat-header-row *matHeaderRowDef="columns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>      
+    </mat-table>
+    </form>
+  </mat-card-content>
+</mat-card>

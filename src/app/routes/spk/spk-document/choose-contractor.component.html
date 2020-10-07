@@ -1,0 +1,40 @@
+<mat-dialog-content>
+  <mat-accordion>
+      <mat-expansion-panel>
+          <mat-expansion-panel-header>
+              <mat-panel-title>Pencarian</mat-panel-title>
+          </mat-expansion-panel-header>
+          <form>
+            <div fxLayout="row wrap" fxLayoutGap="10px grid">
+              <div fxFlex="70" fxFlex.lt-sm="100">
+                <mat-form-field class="m-r-8" fxFlex="100">
+                  <input matInput placeholder="Nama Kontraktor, Kota, atau Jenis Kontraktor" [(ngModel)]="searchValue.search" name="search">
+                </mat-form-field>
+              </div>
+              <div fxFlex="20" fxFlex.lt-sm="100">
+                <mat-form-field class="m-r-8" fxFlex="100">
+                  <mat-label>Klasifikasi</mat-label>
+                  <mat-select [(ngModel)]="searchValue.classification" name="classification">
+                    <mat-option value="">-- ALL --</mat-option>
+                    <mat-option value="Kecil">Kecil</mat-option>
+                    <mat-option value="Menengah">Menengah</mat-option>
+                    <mat-option value="Besar">Besar</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div fxFlex="10" fxFlex.lt-sm="100">
+                <button mat-raised-button color="primary" (click)="getContractors()">Cari</button>            
+              </div>
+            </div>
+          </form>
+          <div>{{searchValue|json}}</div>
+      </mat-expansion-panel>
+  </mat-accordion>
+
+  <mtx-grid class="mat-elevation-z1"
+            [data]="listContractors"
+            [columns]="columns"
+            [loading]="isLoading"
+            [hidePageSize]="true">
+  </mtx-grid>
+</mat-dialog-content>

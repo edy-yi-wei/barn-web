@@ -1,0 +1,25 @@
+.mat-table {
+  overflow-x: auto;
+  mat-header-cell,
+  mat-cell {    
+    padding: 0px 10px;   
+  }
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.green-color {
+  color: green;
+}
+
+.status-position-right {
+  float: right;
+  margin-top: 5px;
+  font-size: xx-large;
+}

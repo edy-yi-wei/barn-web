@@ -1,0 +1,221 @@
+<mat-card>
+  <mat-card-actions>
+    <button mat-raised-button class="m-t-8" (click)="back()"><mat-icon>list</mat-icon> Kembali</button>
+    <button mat-raised-button color="primary" class="m-t-8" (click)="save()"><mat-icon>save</mat-icon> Simpan</button>
+  </mat-card-actions>
+  
+  <mat-card-content>
+    <mat-tab-group dynamicHeight>
+      <mat-tab>
+        <ng-template mat-tab-label>Profile</ng-template>
+        <form [formGroup]="formContractor" class="matero-form-horizontal" style="padding-top: 20px;">
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="65" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Nama Kontraktor</mat-label>
+                <input matInput formControlName="contractorName" required>
+                <mat-error *ngIf="formContractor.get('contractorName').invalid">
+                  Silahkan input nama kontraktor
+                </mat-error>
+              </mat-form-field>
+            </div>          
+            <div fxFlex="35" fxFlex.lt-sm="80">
+              <mat-form-field>
+                <mat-label>Tipe Kontraktor</mat-label>
+                <input matInput formControlName="contractorType" required>
+                <mat-error *ngIf="formContractor.get('contractorType').invalid">
+                  Silahkan input tipe kontraktor
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Alamat</mat-label>
+                <textarea matInput formControlName="address"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="60" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Kota</mat-label>
+                <input matInput formControlName="city">
+              </mat-form-field>
+            </div>
+            <div fxFlex="40" fxFlex.lt-sm="80">
+              <mat-form-field>
+                <mat-label>Telp</mat-label>
+                <input matInput formControlName="telp">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="20" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Mulai SBUJK</mat-label>
+                <input matInput [matDatepicker]="sbujkStartPicker" formControlName="sbujkStartDate" required>
+                <mat-datepicker-toggle matSuffix [for]="sbujkStartPicker"></mat-datepicker-toggle>
+                <mat-datepicker #sbujkStartPicker></mat-datepicker>
+                <mat-error *ngIf="formContractor.get('sbujkStartDate').invalid">
+                  Silahkan pilih tanggal
+                </mat-error>              
+              </mat-form-field>
+            </div>
+            <div fxFlex="20" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Selesai SBUJK</mat-label>
+                <input matInput [matDatepicker]="sbujkEndPicker" formControlName="sbujkEndDate" required>
+                <mat-datepicker-toggle matSuffix [for]="sbujkEndPicker"></mat-datepicker-toggle>
+                <mat-datepicker #sbujkEndPicker></mat-datepicker>
+                <mat-error *ngIf="formContractor.get('sbujkEndDate').invalid">
+                  Silahkan pilih tanggal
+                </mat-error>              
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="30" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Skala</mat-label>
+                <mat-select formControlName="classification" required>
+                  <mat-option>-- None --</mat-option>
+                  <mat-option value="Kecil">Kecil</mat-option>
+                  <mat-option value="Menengah">Menengah</mat-option>
+                  <mat-option value="Besar">Besar</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formContractor.get('classification').invalid">
+                  Silahkan pilih skala kontraktor
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div fxFlex="40" fxFlex.lt-sm="70">
+              <mat-form-field>
+                <mat-label>NPWP</mat-label>
+                <input matInput formControlName="taxNumber">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="20px grid">
+            <div fxFlex="30" fxFlex.lt-sm="50">
+              <mat-form-field>
+                <mat-label>Pph 4</mat-label>
+                <input matInput formControlName="pph4Value">
+              </mat-form-field>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="25">
+              <mat-checkbox formControlName="spm">SPM</mat-checkbox>
+            </div>
+            <div fxFlex="15" fxFlex.lt-sm="25">
+              <mat-checkbox formControlName="pkp">PKP</mat-checkbox>
+            </div>
+          </div>
+
+          <div fxLayout="row wrap" fxLayoutGap="8px grid">
+            <div fxFlex="100" fxFlex.lt-sm="100">
+              <mat-form-field>
+                <mat-label>Keterangan</mat-label>
+                <textarea matInput formControlName="notes"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>Representative</ng-template>                
+        <form [formGroup]="formContractor" style="padding-top: 20px;">          
+          <button mat-raised-button color="accent" (click)="addRow()"><mat-icon>add</mat-icon></button>
+          <mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="name">
+              <!-- <mat-header-cell fxFlex="300px" *matHeaderCellDef>Nama</mat-header-cell> -->
+              <mat-cell fxFlex="300px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Nama</mat-label>
+                  <input matInput formControlName="name" required>
+                  <mat-error *ngIf="element.get('name').invalid">
+                    Silahkan input nama PIC
+                  </mat-error>
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="position">
+              <!-- <mat-header-cell fxFlex="250px" *matHeaderCellDef>Jabatan</mat-header-cell> -->
+              <mat-cell fxFlex="250px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Jabatan</mat-label>
+                  <input matInput formControlName="position" required>
+                  <mat-error *ngIf="element.get('position').invalid">
+                    Silahkan input jabatan PIC
+                  </mat-error>
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="birthPlace">
+              <!-- <mat-header-cell fxFlex="250px" *matHeaderCellDef>Tempat Lahir</mat-header-cell> -->
+              <mat-cell fxFlex="250px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Tempat Lahir</mat-label>
+                  <input matInput formControlName="birthPlace">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="birthDate">                
+              <!-- <mat-header-cell fxFlex="120px" *matHeaderCellDef>Tanggal Lahir</mat-header-cell> -->
+              <mat-cell fxFlex="120px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Tanggal Lahir</mat-label>
+                  <input matInput [matDatepicker]="birthdatePicker" formControlName="birthDate">
+                  <mat-datepicker-toggle matSuffix [for]="birthdatePicker"></mat-datepicker-toggle>
+                  <mat-datepicker #birthdatePicker></mat-datepicker>
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="idNumber">
+              <!-- <mat-header-cell fxFlex="150px" *matHeaderCellDef>Nomor Identitas</mat-header-cell> -->
+              <mat-cell fxFlex="150px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Nomor Identitas</mat-label>
+                  <input matInput formControlName="idNumber">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="idExpiredDate">
+              <!-- <mat-header-cell fxFlex="120px" *matHeaderCellDef>Masa Berlaku Identitas</mat-header-cell> -->
+              <mat-cell fxFlex="120px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Masa Berlaku ID</mat-label>
+                  <input matInput [matDatepicker]="idExpiredPicker" formControlName="idExpiredDate">
+                  <mat-datepicker-toggle matSuffix [for]="idExpiredPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #idExpiredPicker></mat-datepicker>
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="nationality">
+              <!-- <mat-header-cell fxFlex="150px" *matHeaderCellDef>Kebangsaan</mat-header-cell> -->
+              <mat-cell fxFlex="250px" *matCellDef="let element" [formGroup]="element">
+                <mat-form-field fxFlex="100">
+                  <mat-label>Kebangsaan</mat-label>
+                  <input matInput formControlName="nationality">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <mat-cell fxFlex="50px" *matCellDef="let element; let i=index" [formGroup]="element">
+                  <button mat-icon-button color="warn" (click)="removeRow(i)" aria-label="remove selected row"><mat-icon>delete</mat-icon></button>
+              </mat-cell>
+            </ng-container>
+            <!-- <mat-header-row *matHeaderRowDef="picColumns"></mat-header-row> -->
+            <mat-row *matRowDef="let row; columns: picColumns;"></mat-row>
+          </mat-table>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+  <!-- {{formContractor.value|json}}   -->
+</mat-card>
